@@ -6,7 +6,7 @@ export function HomePage() {
   return (
     <section className="card">
       <h1>Home</h1>
-      <p className="welcome">{user ? `hello ${user.name}` : "hello"}</p>
+      <p className="welcome">{user ? `Hello ${user.name}` : "Hello"}</p>
     </section>
   );
 }

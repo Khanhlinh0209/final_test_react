@@ -1,17 +1,18 @@
-import type { ReactNode } from "react";
+import { Outlet } from "react-router-dom";
 import { Header } from "../common/Header";
 
 type AppLayoutProps = {
   isAuthenticated: boolean;
   onAuthClick: () => void;
-  children: ReactNode;
 };
 
-export function AppLayout({ isAuthenticated, onAuthClick, children }: AppLayoutProps) {
+export function AppLayout({ isAuthenticated, onAuthClick }: AppLayoutProps) {
   return (
     <div className="page">
       <Header isAuthenticated={isAuthenticated} onAuthClick={onAuthClick} />
-      <main className="app">{children}</main>
+      <main className="app">
+        <Outlet />
+      </main>
     </div>
   );
 }

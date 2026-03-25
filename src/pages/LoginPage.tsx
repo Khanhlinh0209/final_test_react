@@ -1,6 +1,7 @@
 import { isAxiosError } from "axios";
 import { useState, type SubmitEvent } from "react";
 import { useAuth } from "../hooks/useAuth";
+import { loginSchema } from "../validations/auth";
 
 type LoginPageProps = {
   onLoginSuccess?: () => void;
@@ -15,11 +16,22 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
 
   const handleLogin = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
     setError(null);
 
+    const validation = loginSchema.safeParse({
+      email,
+      password,
+    });
+
+    if (!validation.success) {
+      setError(validation.error.issues[0]?.message ?? "Invalid login form data.");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      await login(email.trim(), password.trim());
+      await login(validation.data.email, validation.data.password);
       onLoginSuccess?.();
     } catch (err) {
       if (!import.meta.env.VITE_API_BASE_URL) {
@@ -34,7 +46,6 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
       } else {
         setError("Login failed. Email must match mockapi and password is 123456.");
       }
-      // eslint-disable-next-line no-console
       console.error(err);
     } finally {
       setLoading(false);
@@ -44,7 +55,7 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
   return (
     <section className="card">
       <h1>Login</h1>
-      <form id="login-form" className="form" onSubmit={(event) => void handleLogin(event)}>
+      <form id="login-form" className="form" noValidate onSubmit={(event) => void handleLogin(event)}>
         <label>
           Email
           <input
