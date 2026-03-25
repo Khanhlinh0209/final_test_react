@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { useAuth } from "../hooks/useAuth";
 
 type LoginPageProps = {
@@ -13,7 +13,7 @@ export function LoginPage({ onLoginSuccess }: LoginPageProps) {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
 
-  const handleLogin = async (event: FormEvent) => {
+  const handleLogin = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     setLoading(true);
     setError(null);

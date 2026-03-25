@@ -1,11 +1,17 @@
-import { useState, type FormEvent } from "react";
+import { useState, type SubmitEvent } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { useUser } from "../hooks/useUser";
+import { useEmployee } from "../hooks/useEmployee";
 
 export function EmployeesPage() {
   const { isAuthenticated } = useAuth();
-  const { employees, loading, mutating, error, createEmployee, updateEmployee, deleteEmployee } =
-    useUser(isAuthenticated);
+  const {
+    employees,
+    loading,
+    mutating,
+    error,
+    createEmployee,
+    updateEmployee,
+    deleteEmployee } = useEmployee(isAuthenticated);
   const [fullName, setFullName] = useState("");
   const [department, setDepartment] = useState("");
   const [gender, setGender] = useState("");
@@ -18,7 +24,7 @@ export function EmployeesPage() {
     setEditingId(null);
   };
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const payload = {
